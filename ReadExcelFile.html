@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <script src="https://unpkg.com/read-excel-file@4.x/bundle/read-excel-file.min.js"></script>
+    </head>
+    <style>
+    #input {
+        margin-left: 550px;
+        margin-top: 50px;
+    }
+    table {
+        margin-left: 150px;
+        margin-top: 50px;
+    }
+    #table-data {
+        width: 70%;
+    }
+    #table-data td {
+        border: 1px solid black;
+        text-align: center;
+    }
+    #mainHeading {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 30px;
+        text-align: center;
+        margin-top: 50px;
+        text-decoration: underline;
+        color: darkorange;
+    }
+    </style>
+    <body>
+        <h1 id="mainHeading"> READ EXCEL DATA AND DISPLAY IN TABLE </h1>
+        <input type="file" id="input">
+        <table id="table-data"></table>
+    </body>
+    <script>
+        var input = document.getElementById("input")
+        input.addEventListener('change',function(params) {
+            readXlsxFile(input.files[0]).then(function(data){
+                // console.log(data)
+                var i = 0;
+                data.map((row , index)=> {
+                    if (i == 0)
+                {
+                    let table = document.getElementById("table-data");
+                    generateTableHead(table , row);
+                }
+                    if (i > 0)
+                {
+                    let table = document.getElementById("table-data");
+                    generateTableRow(table , row);
+                }
+                i++;
+                });
+            });
+        });
+
+        function generateTableHead(table , data) {
+            let thead = table.createTHead();
+            let row = thead.insertRow();
+            for (let key of data) {
+                let th = document.createElement('th');
+                let text = document.createTextNode(key);
+                th.appendChild(text);
+                row.appendChild(th);
+            }
+        }
+
+        function generateTableRow(table , data) {
+            let newRow = table.insertRow (-1);
+            data.map((row , index) => {
+                let newCell = newRow.insertCell();
+                let newtext = document.createTextNode(row);
+                newCell.appendChild(newtext)
+            });
+        }
+    </script>
+</html>
